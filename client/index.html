@@ -13,29 +13,24 @@
     <script>
 
       var socket = io("http://127.0.0.1:8300");
+      socket.emit('write', {m: 1});
 
-      setupSocket(socket);
-      console.log(socket.emit('ping', '1234567'));
+      socket.on('pongg', function(data) {
+        console.log('pongg');
+        console.log(data);
+        console.log(socket.emit('write', {data: 'foo!', id: '111'}));
+      });
 
-      function setupSocket(socket) {
 
 
-          socket.on('pong', function () {
-              console.log('Woow');
-          });
+      (function(){
+        console.log('ping pong clisnet side');
+        socket.emit('write', {m: 1});
+        setTimeout(arguments.callee, 3000);
+      })();
 
-          socket.on('connect_failed', function () {
-              socket.close();
-              console.log('Connection failed.');
-          });
-
-          socket.on('disconnect', function () {
-              socket.close();
-              console.log('Disconnected!');
-          });
-      };
 
     </script>
-     :)
+     :) <br />
   </body>
 </html>
