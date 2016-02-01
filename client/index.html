@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Shootify</title>
+    <script src="socket.io-1.4.5.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+    </style>
+  </head>
+  <body>
+    <script>
+
+      var socket = io("http://127.0.0.1:8300");
+
+      setupSocket(socket);
+      console.log(socket.emit('ping', '1234567'));
+
+      function setupSocket(socket) {
+
+
+          socket.on('pong', function () {
+              console.log('Woow');
+          });
+
+          socket.on('connect_failed', function () {
+              socket.close();
+              console.log('Connection failed.');
+          });
+
+          socket.on('disconnect', function () {
+              socket.close();
+              console.log('Disconnected!');
+          });
+      };
+
+    </script>
+     :)
+  </body>
+</html>
