@@ -9,7 +9,6 @@ var BaseEntity = function (settings)
 		for (var name in data) {
 			if (typeof __[name] != 'undefined') {
 				__[name] = data[name];
-				console.log(name);
 			}
 		}
 	}
@@ -23,6 +22,8 @@ module.exports = {
 		var __ = this;
 
 		__.hp = 100;
+		__.x = 0;
+		__.y = 0;
 
 		__.init = function()
 		{
@@ -30,7 +31,7 @@ module.exports = {
 		    __.prototype = new BaseEntity();
 		    __.prototype.constructor = __;
 		    __.fill(data);
-
+		    return __;
 		}
 
 	},

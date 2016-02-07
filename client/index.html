@@ -22,10 +22,15 @@
       });
 
 
+      socket.on('player', function(data) {
+        console.log('PLAYER');
+        console.log(data);
+      });
 
       (function(){
         console.log('ping pong clisnet side');
-        socket.emit('write', {m: 1});
+        socket.emit('player.move', {x: 1, y:2});
+        console.log(socket.emit('player'));
         setTimeout(arguments.callee, 3000);
       })();
 
