@@ -7,35 +7,78 @@
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
+	  .player{
+		position: absolute;
+		width: 300px;
+		height: 20px;
+		background: #DDD;
+	  }
     </style>
   </head>
   <body>
     <script>
 
-      var socket = io("http://127.0.0.1:8300");
-      socket.emit('write', {m: 1});
-
-      socket.on('pongg', function(data) {
-        console.log('pongg');
+	var socket = io("http://127.0.0.1:8300", {'transports': ['websocket', 'polling']});
+    
+	var player = {
+	
+		getAll: function(){
+			console.log('Client: Player.getAll');
+			console.log(socket.emit('Player.getAll'));
+		},
+	
+		updatePosition: function(data){
+			console.log('Client: Player.updatePosition');
+			console.log(socket.emit('Player.updatePosition', data));
+		}		
+		
+	};
+	
+	socket.on('Player.getAll', function(data) {
+        console.log('Server: Player.getAll');
         console.log(data);
-        console.log(socket.emit('write', {data: 'foo!', id: '111'}));
-      });
-
-
-      socket.on('player', function(data) {
-        console.log('PLAYER');
+	});
+	
+	socket.on('Broadcast.Player.updatePosition', function(data){
+		console.log('Server: Player.updatePosition');
+		console.log(data);
+		
+		var p = document.getElementById(data.id);
+		p.style.top = data.y + 'px';
+		p.style.left = data.x + 'px';
+		
+	});
+	
+	socket.on('World.currentState', function(data) {
+        console.log('Server: World.currentState');
         console.log(data);
-      });
+		
+		for(var playerId in data.players){
+			newDiv = document.createElement("div");
+			newDiv.innerHTML = playerId;
+			newDiv.id = playerId;
+			newDiv.className = 'player';
+			
+			document.getElementsByTagName('body')[0].appendChild(newDiv);
+		}
+	});
+	
+	socket.on('Broadcast.Player.connected', function(data){
+		console.log('Broadcast: Player.connected');
+		console.log(data);
+		
+		newDiv = document.createElement("div");
+		newDiv.innerHTML = data.id;
+		newDiv.id = data.id;
+		newDiv.className = 'player';
+		
+		document.getElementsByTagName('body')[0].appendChild(newDiv);
+	});
 
-      (function(){
-        console.log('ping pong clisnet side');
-        socket.emit('player.move', {x: 1, y:2});
-        console.log(socket.emit('player'));
-        setTimeout(arguments.callee, 3000);
-      })();
+
 
 
     </script>
-     :) <br />
+
   </body>
 </html>
