@@ -33,6 +33,15 @@ module.exports = {
 		    __.fill(data);
 		    return __;
 		}
+		
+		__.get = function(){
+			return {
+				id: __.id,
+				hp: __.hp,
+				x: __.x,
+				y: __.y
+			}
+		}
 
 	},
 
